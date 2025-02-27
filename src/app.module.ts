@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { HashModule } from './hash/hash.module';
+import { Exercise } from './exercises/entities/exercise.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { HashModule } from './hash/hash.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User],
+        entities: [User, Exercise],
         synchronize: true,
       }),
       inject: [ConfigService],
