@@ -1,15 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { CreateExerciseDto } from './dto/create-exercise.dto';
-import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Exercise } from './entities/exercise.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class ExercisesService {
-  private readonly exercises: Exercise[] = [
-    {
-      id: '1',
-      name: 'Приседания со штангой',
-      content: `Базовое упражнение для развития силы ног
+export class ExercisesService implements OnModuleInit {
+  constructor(
+    @InjectRepository(Exercise)
+    private exercisesRepository: Repository<Exercise>,
+  ) {}
+
+  async onModuleInit() {
+    const exercises = [
+      {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        name: 'Приседания со штангой',
+        content: `Базовое упражнение для развития силы ног
 
 Техника выполнения:
 1. Установите штангу на стойки на уровне верхней части груди
@@ -21,17 +27,15 @@ export class ExercisesService {
 7. Достигнув параллели с полом, начните подъем
 8. Выпрямитесь и выдохните
 9. Повторите нужное количество раз`,
-      sets: 4,
-      reps: 10,
-      rest: 90,
-      weight: 60,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: '2',
-      name: 'Жим штанги лежа',
-      content: `Техника выполнения:
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174001',
+        name: 'Жим штанги лежа',
+        content: `Базовое упражнение для развития грудных мышц и трицепсов
+
+Техника выполнения:
 1. Лягте на скамью, поставив ноги firmly на пол
 2. Возьмитесь за штангу хватом чуть шире плеч
 3. Снимите штангу со стоек
@@ -40,17 +44,15 @@ export class ExercisesService {
 6. В верхней точке руки полностью выпрямлены
 7. Повторите заданное количество раз
 8. После последнего повторения верните штангу на стойки`,
-      sets: 3,
-      reps: 8,
-      rest: 120,
-      weight: 80,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: '3',
-      name: 'Становая тяга',
-      content: `Техника выполнения:
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174002',
+        name: 'Становая тяга',
+        content: `Комплексное упражнение для развития силы спины и ног
+
+Техника выполнения:
 1. Подойдите к штанге, поставив ноги на ширине плеч
 2. Наклонитесь и возьмитесь за гриф смешанным хватом
 3. Колени согнуты, спина прямая
@@ -60,66 +62,191 @@ export class ExercisesService {
 7. Опустите штангу под контролем
 8. Повторите нужное количество раз
 9. Не округляйте спину при выполнении`,
-      sets: 5,
-      reps: 5,
-      rest: 180,
-      weight: 100,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ];
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174003',
+        name: 'Подтягивания',
+        content: `Базовое упражнение для развития мышц спины и рук
 
-  create(createExerciseDto: CreateExerciseDto) {
-    const exercise: Exercise = {
-      ...createExerciseDto,
-      id: (this.exercises.length + 1).toString(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    this.exercises.push(exercise);
+Техника выполнения:
+1. Возьмитесь за перекладину хватом сверху на ширине плеч
+2. Повисните на перекладине, полностью выпрямив руки
+3. Подтянитесь, сгибая руки и поднимая тело вверх
+4. Подбородок должен оказаться над перекладиной
+5. Опуститесь в исходное положение под контролем
+6. Повторите нужное количество раз
+7. Держите корпус напряженным во время выполнения`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174004',
+        name: 'Отжимания',
+        content: `Классическое упражнение для развития грудных мышц и трицепсов
 
-    return exercise;
+Техника выполнения:
+1. Примите упор лежа, руки на ширине плеч
+2. Тело должно образовывать прямую линию от головы до пяток
+3. Опуститесь, сгибая руки в локтях
+4. Коснитесь грудью пола
+5. Выжмите тело вверх, выпрямляя руки
+6. Повторите нужное количество раз
+7. Держите локти ближе к телу для лучшей работы трицепсов`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174005',
+        name: 'Жим гантелей сидя',
+        content: `Упражнение для развития дельтовидных мышц
+
+Техника выполнения:
+1. Сядьте на скамью со спинкой, держа гантели в руках
+2. Поднимите гантели до уровня плеч, локти согнуты
+3. Выжмите гантели вверх, выпрямляя руки
+4. В верхней точке руки полностью выпрямлены
+5. Опустите гантели под контролем
+6. Повторите нужное количество раз
+7. Держите спину прижатой к спинке скамьи`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174006',
+        name: 'Разведение гантелей в стороны',
+        content: `Изолирующее упражнение для средних пучков дельтовидных мышц
+
+Техника выполнения:
+1. Встаньте прямо, держа гантели в руках вдоль тела
+2. Поднимите руки в стороны до уровня плеч
+3. Локти слегка согнуты
+4. Опустите руки под контролем
+5. Повторите нужное количество раз
+6. Держите корпус напряженным во время выполнения
+7. Не используйте инерцию для подъема веса`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174007',
+        name: 'Французский жим',
+        content: `Изолирующее упражнение для трицепсов
+
+Техника выполнения:
+1. Лягте на скамью, держа штангу или гантель над грудью
+2. Опустите вес за голову, сгибая только локти
+3. Руки должны оставаться неподвижными
+4. Верните вес в исходное положение
+5. Повторите нужное количество раз
+6. Держите локти направленными вперед
+7. Не разводите локти в стороны`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174008',
+        name: 'Скручивания',
+        content: `Упражнение для развития мышц пресса
+
+Техника выполнения:
+1. Лягте на спину, согнув ноги в коленях
+2. Руки за головой или скрещены на груди
+3. Поднимите верхнюю часть корпуса, скручивая пресс
+4. Опуститесь под контролем, не касаясь пола
+5. Повторите нужное количество раз
+6. Не тяните шею руками
+7. Держите поясницу прижатой к полу`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174009',
+        name: 'Планка',
+        content: `Статическое упражнение для укрепления мышц кора
+
+Техника выполнения:
+1. Примите упор лежа на предплечьях
+2. Тело должно образовывать прямую линию от головы до пяток
+3. Держите локти под плечами
+4. Напрягите мышцы пресса и ягодиц
+5. Удерживайте позицию заданное время
+6. Не прогибайте поясницу
+7. Дышите равномерно во время выполнения`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174010',
+        name: 'Выпады с гантелями',
+        content: `Упражнение для развития мышц ног и ягодиц
+
+Техника выполнения:
+1. Встаньте прямо, держа гантели в руках вдоль тела
+2. Сделайте шаг вперед, сгибая колено передней ноги
+3. Опуститесь до касания коленом задней ноги пола
+4. Вернитесь в исходное положение
+5. Повторите для другой ноги
+6. Держите спину прямой
+7. Колено передней ноги не должно выходить за носок`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174011',
+        name: 'Румынская становая тяга',
+        content: `Упражнение для развития задней поверхности бедра и ягодиц
+
+Техника выполнения:
+1. Встаньте прямо, держа штангу или гантели в руках
+2. Наклонитесь вперед, отводя таз назад
+3. Опустите вес вдоль ног
+4. Вернитесь в исходное положение
+5. Повторите нужное количество раз
+6. Держите спину прямой
+7. Колени слегка согнуты, но не сгибаются во время движения`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '123e4567-e89b-12d3-a456-426614174012',
+        name: 'Тяга верхнего блока',
+        content: `Упражнение для развития широчайших мышц спины
+
+Техника выполнения:
+1. Сядьте на тренажер, установив нужный вес
+2. Возьмитесь за рукоятку хватом сверху
+3. Подтяните рукоятку к верхней части груди
+4. Сведите лопатки в конце движения
+5. Верните рукоятку в исходное положение
+6. Повторите нужное количество раз
+7. Держите спину прямой во время выполнения`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    // Обновляем или добавляем упражнения
+    for (const exercise of exercises) {
+      await this.exercisesRepository.save(exercise);
+    }
+  }
+
+  private async deleteExercisesWithNullContent() {
+    await this.exercisesRepository
+      .createQueryBuilder()
+      .delete()
+      .from(Exercise)
+      .where('content IS NULL')
+      .execute();
   }
 
   findAll() {
-    return this.exercises;
+    return this.exercisesRepository.find();
   }
 
   findOne(id: string) {
-    return this.exercises.find((exercise) => exercise.id === id);
-  }
-
-  update(id: string, updateExerciseDto: UpdateExerciseDto) {
-    const index = this.exercises.findIndex((exercise) => exercise.id === id);
-    if (index !== -1) {
-      this.exercises[index] = {
-        ...this.exercises[index],
-        ...updateExerciseDto,
-        updatedAt: new Date(),
-      };
-
-      return this.exercises[index];
-    }
-
-    return null;
-  }
-
-  remove(id: string) {
-    const filteredExercises = this.exercises.filter(
-      (exercise) => exercise.id !== id,
-    );
-
-    const removedExercise = this.exercises.find(
-      (exercise) => exercise.id === id,
-    );
-
-    if (!removedExercise) {
-      return null;
-    }
-
-    this.exercises.length = 0;
-    this.exercises.push(...filteredExercises);
-
-    return removedExercise;
+    return this.exercisesRepository.findOneBy({ id });
   }
 }

@@ -2,20 +2,23 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
-  Length,
-  Max,
+  IsUUID,
+  IsDate,
   Min,
+  Max,
+  IsOptional,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class CreateExerciseDto {
+export class CreateWorkoutDto {
   @IsNotEmpty()
-  @IsString()
-  @Length(1, 250)
-  name: string;
+  @IsUUID()
+  exerciseId: string;
 
   @IsNotEmpty()
-  @IsString()
-  content: string;
+  @Type(() => Date)
+  @IsDate()
+  workoutDate: Date;
 
   @IsNotEmpty()
   @IsNumber()
@@ -29,15 +32,15 @@ export class CreateExerciseDto {
   @Max(100)
   reps: number;
 
-  @IsNotEmpty()
-  @IsNumber()
-  @Min(0)
-  @Max(300)
-  rest: number;
-
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   @Min(0)
   @Max(500)
-  weight: number;
+  weight?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(300)
+  rest?: number;
 }
