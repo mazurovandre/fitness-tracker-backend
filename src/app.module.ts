@@ -7,6 +7,7 @@ import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { HashModule } from './hash/hash.module';
 import { Exercise } from './exercises/entities/exercise.entity';
+import { ExercisesModule } from './exercises/exercises.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { Exercise } from './exercises/entities/exercise.entity';
     UsersModule,
     AuthModule,
     HashModule,
+    ExercisesModule,
   ],
   controllers: [AppController],
   providers: [],

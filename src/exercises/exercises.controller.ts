@@ -1,69 +1,45 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  Param,
-  Patch,
   Post,
-  Req,
-  UseGuards,
+  Body,
+  Patch,
+  Param,
+  Delete,
 } from '@nestjs/common';
-import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
-import { Exercise } from './entities/exercise.entity';
-import { ExercisesService } from './exercises.service';
 
-@Controller('Exercises')
+@Controller('exercises')
 export class ExercisesController {
-  constructor(private readonly ExercisesService: ExercisesService) {}
+  constructor(private readonly exercisesService: ExercisesService) {}
 
-  @UseGuards(JwtGuard)
   @Post()
-  async create(
-    @Req() req,
-    @Body() createExerciseDto: CreateExerciseDto,
-  ): Promise<Exercise> {
-    return await this.ExercisesService.create(req.user.id, createExerciseDto);
+  create(@Body() createExerciseDto: CreateExerciseDto) {
+    return this.exercisesService.create(createExerciseDto);
   }
 
-  @Get('last')
-  async findLast(): Promise<Exercise[]> {
-    return await this.ExercisesService.findLast();
+  @Get()
+  findAll() {
+    return this.exercisesService.findAll();
   }
 
-  @Get('top')
-  async findTop(): Promise<Exercise[]> {
-    return await this.ExercisesService.findTop();
-  }
-
-  @UseGuards(JwtGuard)
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Exercise> {
-    return await this.ExercisesService.findOneById(id);
+  findOne(@Param('id') id: string) {
+    return this.exercisesService.findOne(id);
   }
 
-  @UseGuards(JwtGuard)
   @Patch(':id')
-  async update(
-    @Param('id') ExerciseId: string,
+  update(
+    @Param('id') id: string,
     @Body() updateExerciseDto: UpdateExerciseDto,
-    @Req() req,
-  ): Promise<Exercise> {
-    return await this.ExercisesService.updateOneById(
-      req.user.id,
-      ExerciseId,
-      updateExerciseDto,
-    );
+  ) {
+    return this.exercisesService.update(id, updateExerciseDto);
   }
 
-  @UseGuards(JwtGuard)
   @Delete(':id')
-  async removeOne(
-    @Req() req,
-    @Param('id') ExerciseId: string,
-  ): Promise<Exercise> {
-    return await this.ExercisesService.removeOneById(req.user.id, ExerciseId);
+  remove(@Param('id') id: string) {
+    return this.exercisesService.remove(id);
   }
 }

@@ -1,4 +1,4 @@
-import { Length } from 'class-validator';
+import { Length, Min, Max } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -22,11 +22,26 @@ export class Exercise {
   @Length(1, 250)
   name: string;
 
-  @Column({ type: 'jsonb' })
-  content: Array<{
-    type: string;
-    content?: string;
-    src?: string;
-    alt?: string;
-  }>;
+  @Column({ type: 'text' })
+  content: string;
+
+  @Column()
+  @Min(1)
+  @Max(10)
+  sets: number;
+
+  @Column()
+  @Min(1)
+  @Max(100)
+  reps: number;
+
+  @Column()
+  @Min(0)
+  @Max(300)
+  rest: number;
+
+  @Column({ type: 'float' })
+  @Min(0)
+  @Max(500)
+  weight: number;
 }

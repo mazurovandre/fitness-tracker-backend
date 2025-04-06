@@ -1,26 +1,11 @@
-import { Type } from 'class-transformer';
 import {
-  IsArray,
   IsNotEmpty,
+  IsNumber,
   IsString,
   Length,
-  ValidateNested,
+  Max,
+  Min,
 } from 'class-validator';
-
-class ContentBlock {
-  @IsString()
-  @IsNotEmpty()
-  type: 'text' | 'image';
-
-  @IsString()
-  content?: string;
-
-  @IsString()
-  src?: string;
-
-  @IsString()
-  alt?: string;
-}
 
 export class CreateExerciseDto {
   @IsNotEmpty()
@@ -28,8 +13,31 @@ export class CreateExerciseDto {
   @Length(1, 250)
   name: string;
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ContentBlock)
-  content: ContentBlock[];
+  @IsNotEmpty()
+  @IsString()
+  content: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(1)
+  @Max(10)
+  sets: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(1)
+  @Max(100)
+  reps: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
+  @Max(300)
+  rest: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
+  @Max(500)
+  weight: number;
 }
